@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Restrito</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #375a7f;
+        }
+
+        #logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #logo-arvore {
+            width: 80px;
+            height: 100px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        #logo-arvore path {
+            fill: #375a7f; /* Cor azul governamental */
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            margin-top: 5px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #senha-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #senha-container input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 250px;
+            font-size: 1em;
+        }
+
+        #senha-container button {
+            background-color: #375a7f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        #senha-container button:hover {
+            background-color: #2a4562;
+        }
+
+        #link-container {
+            display: none; /* Inicialmente escondido */
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #link-container a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #link-container a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        .mensagem-erro {
+            color: red;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div id="logo-container">
+                <svg id="logo-arvore" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L65 25 H35 Z" fill="#375a7f" />
+                    <path d="M50 25 L75 65 H25 L50 25 Z" fill="#375a7f" />
+                    <path d="M50 65 L60 95 H40 Z" fill="#375a7f" />
+                    <path d="M45 95 L45 115 H55 L55 95 Z" fill="#888" />
+                </svg>
+                <h1>Acesso Restrito</h1>
+            </div>
+        </header>
+        <main>
+            <div id="senha-container">
+                <p>Clique na árvore para inserir a senha.</p>
+                <input type="password" id="senha" placeholder="Digite a senha">
+                <button id="verificar-senha">Acessar</button>
+                <div id="mensagem-erro" class="mensagem-erro">Senha incorreta!</div>
+            </div>
+            <div id="link-container">
+                <p>Acesso liberado! Clique no link abaixo:</p>
+                <a id="link-secreto" href="https://github.com/smpkikkk/tempus" target="_blank">Link Secreto</a>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2025 - Acesso Seguro</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoArvore = document.getElementById('logo-arvore');
+            const senhaContainer = document.getElementById('senha-container');
+            const senhaInput = document.getElementById('senha');
+            const verificarSenhaBotao = document.getElementById('verificar-senha');
+            const linkContainer = document.getElementById('link-container');
+            const linkSecretoElement = document.getElementById('link-secreto');
+            const mensagemErro = document.getElementById('mensagem-erro');
+
+            const senhaCorreta = "A5modeusL1vre";
+            const linkSecretoURL = "https://github.com/smpkikkk/tempus";
+
+            let senhaVisivel = false;
+
+            logoArvore.addEventListener('click', () => {
+                senhaVisivel = true;
+                senhaContainer.style.display = 'flex';
+                mensagemErro.style.display = 'none'; // Esconde a mensagem de erro ao exibir o campo de senha
+            });
+
+            verificarSenhaBotao.addEventListener('click', () => {
+                if (senhaVisivel) {
+                    if (senhaInput.value === senhaCorreta) {
+                        linkSecretoElement.href = linkSecretoURL;
+                        linkContainer.style.display = 'block';
+                        senhaContainer.style.display = 'none';
+                        senhaInput.value = ''; // Limpar o campo de senha após o acesso
+                        senhaVisivel = false;
+                    } else {
+                        mensagemErro.style.display = 'block';
+                    }
+                }
+            });
+
+            // Impede o envio do formulário ao pressionar Enter no campo de senha
+            senhaInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter' && senhaVisivel) {
+                    event.preventDefault();
+                    verificarSenhaBotao.click();
+                }
+            });
+
+            // Inicialmente, esconde o campo de senha e o link
+            senhaContainer.style.display = 'none';
+            linkContainer.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>
